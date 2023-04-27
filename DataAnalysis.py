@@ -72,6 +72,16 @@ def analysis(edges):
             print("Node with max out degree is {}, out degree is {}".format(key, value))
 
     # 将节点按照入度大小排序,按出度大小排序
+    I = dict(sorted(in_degree.items(), key=lambda item:item[1], reverse=True))
+    O = dict(sorted(out_degree.items(), key=lambda item:item[1], reverse=True))
+    with open('point_in_degree_sorted.txt', 'w') as f:
+        for key, val in I.items():
+            f.write(str(key) + " " + str(val) + '\n')
+    with open('point_out_degree_sorted.txt', 'w') as f:
+        for key, val in O.items():
+            f.write(str(key) + " " + str(val) + '\n')
+
+
 
 if __name__ == '__main__':
     f = open('Data.txt', 'r')
