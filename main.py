@@ -10,6 +10,7 @@ def SMatrix2dict(edges,nodes):
             M[edge[0]] = [edge[1]]
         else :
             M[edge[0]].append(edge[1])
+    M = dict(sorted(M.items(),key=lambda item:item[0]))
     with open('Sparse_Matrix.txt', 'w') as f:
         for src, dest in M.items():
             f.write(str(src) + " ")
@@ -54,6 +55,6 @@ if __name__ == '__main__':
     # r = Block_BU(teleport, e, N, K)
     ##4. BLock_SU 把矩阵分成条带
     # r = Block_SU(teleport, e, N, K)
-    with open(f'result_{Alg[2]}.txt',"w") as outfile:
+    with open(f'result_{Alg[1]}.txt',"w") as outfile:
         for i in range (len(r)):
             outfile.write(str(nodes[i]) + " " + str(r[i])+ '\n')

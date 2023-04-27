@@ -33,19 +33,18 @@ def basic(teleport, e, N):
     with open("r_old.txt", 'w') as f:
         for i in range(N):
             f.write(str(1 / N) + '\n')
-    f.close()
     r_new = np.full(N, (1 - teleport) / N)  # r_new的初始化
     error = 1   #r_new和r_old的误差
     t = 0   # 迭代次数
+
     while error > e:
+        write_time = 0
         r_new = np.full(N, (1 - teleport) / N)
         with open('r_old.txt', 'r') as r_old, open('Sparse_Matrix.txt', 'r') as SM:
             source = -1
             data = []
             for i in range(N):
                 r_old_i = float(r_old.readline())
-                if source > i:
-                    continue
                 while source < i:
                     data = SM.readline().replace('\r', '').replace('\n', '')
                     data = data.split() # 用空格分开,返回一个列表
@@ -53,7 +52,8 @@ def basic(teleport, e, N):
                 if source == i:  # 判断是否找到
                     for j in range(1, len(data)):
                         r_new[int(data[j])] += teleport * r_old_i / (len(data) - 1)
-                    continue
+                    write_time += 1
+        print(write_time)
         # 计算error
         error = 0
         with open('r_old.txt', 'r') as r_old:
@@ -64,6 +64,7 @@ def basic(teleport, e, N):
         with open('r_old.txt', 'w') as r_old:
             for r_new_i in r_new:
                 r_old.write(str(r_new_i) + '\n')
+        print(sum(r_new))
         t += 1
         print("Iteration {} , error is {}".format(t, error))
     return r_new

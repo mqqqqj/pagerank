@@ -77,8 +77,8 @@ if __name__ == '__main__':
     f = open('Data.txt', 'r')
     edges = [line.strip('\n').split(' ') for line in f]
     teleport = 0.85
-    groundtruth(edges, teleport)
-    # analysis(edges)
+    # groundtruth(edges, teleport)
+    analysis(edges)
 
 
 
