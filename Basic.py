@@ -47,9 +47,13 @@ def basic(teleport, e, N):
                     data = SM.readline().replace('\r', '').replace('\n', '')
                     data = data.split() # 用空格分开,返回一个列表
                     source = int(data[0])
+                    degree = int(data[1])
+                    dests = data[2:]
                 if source == i:  # 判断是否找到
-                    for j in range(1, len(data)):
-                        r_new[int(data[j])] += teleport * r_old_i / (len(data) - 1)
+                    for dest in dests:
+                        r_new[int(dest)] += teleport * r_old_i / degree
+        # print(sum(r_new))
+        r_new = r_new + (1 - sum(r_new)) /N
         # 计算error
         error = 0
         with open('r_old.txt', 'r') as r_old:
@@ -60,7 +64,6 @@ def basic(teleport, e, N):
         with open('r_old.txt', 'w') as r_old:
             for r_new_i in r_new:
                 r_old.write(str(r_new_i) + '\n')
-        print(sum(r_new))
         t += 1
         print("Iteration {} , error is {}".format(t, error))
     return r_new
