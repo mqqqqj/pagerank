@@ -1,6 +1,6 @@
 import networkx as nx
-import matplotlib.pyplot as plt
 import numpy as np
+from igraph import Graph as IGraph
 
 # 使用库,和自己实现的结果对比
 def groundtruth(edges,teleport):
@@ -15,9 +15,18 @@ def groundtruth(edges,teleport):
     # plt.show()
     pr = nx.pagerank(G, alpha=teleport,tol=1e-06)
     # print("Result:", pr)
-    with open("groundtruth.txt", "w") as outfile:
+    with open("networkx.txt", "w") as outfile:
         for key,val in pr.items():
             outfile.write(str(key) + " " + str(val) + '\n')
+    G = IGraph.TupleList(edges, directed=True, vertex_name_attr='name')
+    pg = G.pagerank(implementation='power')
+    pgvs = []
+    for p in zip(G.vs, pg):
+        pgvs.append({'name': p[0]['name'], 'pg': p[1]})
+    pgvs = sorted(pgvs, key=lambda k: k['pg'], reverse=True)
+    with open('igraph.txt', 'w') as outfile:
+        for p in pgvs:
+            outfile.write(p['name'] + " " + str(p['pg']) + '\n')
 
 def analysis(edges):
     # 根据边获取节点的集合
@@ -87,7 +96,7 @@ if __name__ == '__main__':
     f = open('Data.txt', 'r')
     edges = [line.strip('\n').split(' ') for line in f]
     teleport = 0.85
-    # groundtruth(edges, teleport)
+    groundtruth(edges, teleport)
     analysis(edges)
 
 
